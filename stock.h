@@ -1,27 +1,34 @@
-#ifndef STOCK_CONTROLLER_H
-#define STOCK_CONTROLLER_H
-
+#ifndef STOCK_H
+#define STOCK_H
 #include <QString>
-#include <QSqlQuery>
 #include <QSqlQueryModel>
-
-
+#include <QSqlQuery>
 
 class stock
 {
 public:
     stock();
-    stock(int id, QString id_stocks,QString date_ajout,int id_vehicule,QString date_de_livraison);
-    bool ajouter();
-    QSqlQueryModel *afficher();
-    bool modifier();
-    bool supprimer();
-    QSqlQueryModel *displayClause(QString cls);
-    QSqlQueryModel *getIDs();
-private:
-    int id,id_vehicule;
-    QString id_stocks,employee,date_ajout,date_de_livraison;
+    stock(int id_stock , QString date_ajout  ,QString date_reservation );
+
+    int getid_stock();
+    QString  getdate_ajout();
+    QString getdate_reservation();
+
+     bool ajouter();
+     QSqlQueryModel* afficher();
+     QSqlQueryModel* afficher1();
+     QSqlQueryModel* afficher11();
+     QSqlQueryModel* afficher2();
+     QSqlQueryModel* afficher22();
+     QSqlQueryModel* afficher3();
+     QSqlQueryModel* afficher33();
+     QSqlQueryModel *recherche(int);
+     bool supprimer(int);
+     bool modifier(int);
+ private :
+     int id_stock;
+     QString date_ajout, date_reservation;
 
 };
 
-#endif // STOCK_CONTROLLER_H
+#endif // STOCK_H

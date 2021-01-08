@@ -1,25 +1,25 @@
-#include "aziz.h"
+#include "dialoglogin.h"
 #include "connexion.h"
-#include <QMessageBox>
 #include <QApplication>
-
+#include <QMessageBox>
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    connexion c;
-    bool test=c.ouvrirConnexion();
+    Dialoglogin w;
+    w.show();
+    Connexion c;
+    bool test=c.createconnect();
     if(test)
-    {
-        QMessageBox::information(nullptr, QObject::tr("Database is open"),
-                    QObject::tr("Connection successful.\n"
+    {w.show();
+        QMessageBox::critical(nullptr, QObject::tr("database is open"),
+                    QObject::tr("connection successful.\n"
                                 "Click Cancel to exit."), QMessageBox::Cancel);
 }
 else
-
-        QMessageBox::critical(nullptr, QObject::tr("Database is not open"),
-                    QObject::tr("Connection failed.\n"
+        QMessageBox::critical(nullptr, QObject::tr("database is not open"),
+                    QObject::tr("connection failed.\n"
                                 "Click Cancel to exit."), QMessageBox::Cancel);
-    aziz w;
-    w.show();
+
+
     return a.exec();
 }

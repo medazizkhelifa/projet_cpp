@@ -1,87 +1,113 @@
 #include "stock.h"
-
+#include <QDebug>
 stock::stock()
 {
-
+id_stock=0;
+date_ajout="";
+date_reservation="";
 }
 
-stock::stock(int id, QString id_stocks, QString date_ajout, int id_vehicule,QString date_de_livraison)
+stock::stock(int id_stock, QString date_ajout, QString date_reservation)
 {
-    this->id=id;
-    this->id_stocks=id_stocks;
+    this->id_stock=id_stock;
     this->date_ajout=date_ajout;
-    this->id_vehicule=id_vehicule;
-    this->date_de_livraison=date_de_livraison;
+    this->date_reservation=date_reservation;
 }
+int stock::getid_stock(){return id_stock;}
+QString stock::getdate_ajout(){return date_ajout;}
+QString stock::getdate_reservation(){return date_reservation;}
 
-bool stock::ajouter()
-{
+bool stock::ajouter() {
+
     QSqlQuery query;
-    query.prepare("INSERT INTO STOCK (ID, ID_STOCKS, DATE_AJOUT,ID_VEHICULE,DATE_DE_LIVRAISON) "
-                        "VALUES (:id, :id_stocks, :date_ajout,:id_vehicule,:date_de_livraison)");
-    query.bindValue(":id", id);
-    query.bindValue(":id_stocks", id_stocks);
+    query.prepare("INSERT INTO STOCK (id_stock, date_ajout,date_reservation)"
+                  "VALUES (:id_stock, :date_ajout,:date_reservation )");
+    query.bindValue(":id_stock", id_stock);
     query.bindValue(":date_ajout", date_ajout);
-    query.bindValue(":id_vehicule", id_vehicule);
-    query.bindValue(":date_de_livraison", date_de_livraison);
-    return    query.exec();
+    query.bindValue(":date_reservation", date_reservation);
+
+    return query.exec();
 }
 
-QSqlQueryModel *stock::afficher()
-{
-    QSqlQueryModel * model= new QSqlQueryModel();
+QSqlQueryModel * stock::afficher()
+{   QSqlQueryModel * model= new QSqlQueryModel();
 
-    model->setQuery("select ID,ID_STOCKS,DATE_AJOUT,ID_VEHICULE,DATE_DE_LIVRAISON from STOCK");
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("ID_STOCKS "));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("DATE AJOUT"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("ID VEHICULE"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("DATE_DE_LIVRAISON"));
+    model->setQuery("select * from stock order by id_stock");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID stock"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date Ajout"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Reservation"));
+    return model;
+}
+QSqlQueryModel * stock::afficher1()
+{   QSqlQueryModel * model= new QSqlQueryModel();
+
+    model->setQuery("select * from stock order by id_stock ");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID stock"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date Ajout"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Reservation"));
+    return model;
+}
+QSqlQueryModel * stock::afficher11()
+{   QSqlQueryModel * model= new QSqlQueryModel();
+
+    model->setQuery("select * from stock order by id_stock DESC");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID stock"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date Ajout"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Reservation"));
+    return model;
+}
+QSqlQueryModel * stock::afficher2()
+{   QSqlQueryModel * model= new QSqlQueryModel();
+
+    model->setQuery("select * from stock order by date_ajout");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID stock"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date Ajout"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Reservation"));
+    return model;
+}
+QSqlQueryModel * stock::afficher22()
+{   QSqlQueryModel * model= new QSqlQueryModel();
+
+    model->setQuery("select * from stock order by date_ajout DESC");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID stock"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date Ajout"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Reservation"));
+    return model;
+}
+QSqlQueryModel * stock::afficher3()
+{   QSqlQueryModel * model= new QSqlQueryModel();
+
+    model->setQuery("select * from stock order by date_reservation");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID stock"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date Ajout"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Reservation"));
+    return model;
+}
+QSqlQueryModel * stock::afficher33()
+{   QSqlQueryModel * model= new QSqlQueryModel();
+
+    model->setQuery("select * from stock order by date_reservation desc");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID stock"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Date Ajout"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Date Reservation"));
     return model;
 }
 
-bool stock::modifier()
+bool stock::supprimer(int id_stock)
 {
     QSqlQuery query;
-    query.prepare("UPDATE STOCK SET ID_STOCKS=:id_stocks, DATE_AJOUT=:date_ajout, ID_VEHICULE=:id_vehicule , date_de_livraison=:date_de_livraison "
-                        "WHERE ID=:id");
-    query.bindValue(":id", id);
-    query.bindValue(":id_stocks", id_stocks);
+    query.prepare("Delete from stock where id_stock = :id_stock");
+    query.bindValue(":id_stock", id_stock);
+    return query.exec();
+}
+
+bool stock::modifier(int id_stock)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE STOCK SET id_stock=:id_stock, date_ajout=:date_ajout, date_reservation=:date_reservation where id_stock=:id_stock");
+    query.bindValue(":id_stock", id_stock);
     query.bindValue(":date_ajout", date_ajout);
-    query.bindValue(":id_vehicule", id_vehicule);
-    query.bindValue(":date_de_livraison", date_de_livraison);
-    return    query.exec();
-}
+    query.bindValue(":date_reservation", date_reservation);
+    return query.exec();
 
-bool stock::supprimer()
-{
-    QSqlQuery query;
-    query.prepare("DELETE FROM STOCK "
-                        "WHERE ID=:id");
-    query.bindValue(":id", id);
-
-    return    query.exec();
-}
-
-QSqlQueryModel *stock::displayClause(QString cls)
-{
-    QSqlQueryModel * model= new QSqlQueryModel();
-
-    model->setQuery("select ID,ID_STOCKS,DATE_AJOUT,ID_VEHICULE,DATE_DE_LIVRAISON from stock "+cls);
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("ID_STOCKS "));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("date_ajout"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("ID VEHICULE"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("DATE_DE_LIVRAISON"));
-    return model;
-}
-
-QSqlQueryModel *stock::getIDs()
-{
-    QSqlQueryModel * model= new QSqlQueryModel();
-
-    model->setQuery("select ID from STOCK");
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-
-    return model;
 }
